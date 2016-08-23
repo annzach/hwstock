@@ -10,6 +10,7 @@ export default class StockDetails extends Component {
       stockdetails : SearchStore.getDetails()
     }
     this._onChange = this._onChange.bind(this);
+    this.Refresh =this.Refresh.bind(this);
   }
   componentDidMount(){
     SearchStore.startListening(this._onChange);
@@ -18,12 +19,15 @@ export default class StockDetails extends Component {
   componentWillUnmount(){
     SearchStore.stopListening(this._onChange);
   }
-
+   Refresh(e){
+   let symbol = e.target.value;
+   SearchActions.quote(symbol)
+   }
   _onChange(){
     this.setState({stockdetails : SearchStore.getDetails()});
   }
   render(){
-    let { Name , LastPrice , Timestamp , MarketCap , Volume , High , Low , Open} = this.state.stockdetails;
+    let { Name , Symbol, LastPrice , Timestamp , MarketCap , Volume , High , Low , Open} = this.state.stockdetails;
     console.log('this.state.stockdetails:', this.state.stockdetails)
     
 
@@ -41,6 +45,7 @@ export default class StockDetails extends Component {
           <p>LastPrice : <i>{LastPrice}</i></p>
           <p>Volume : <i>{Volume}</i></p>
           <p>Updated At : <i>{Timestamp}</i></p>
+          <button value = {Symbol} onClick ={this.Refresh}>Refresh</button>
 
       </div>
     )
